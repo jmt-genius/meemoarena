@@ -4,6 +4,8 @@ import { Box, Container, Flex, Heading } from "@radix-ui/themes";
 import { useState } from "react";
 import { Counter } from "./Counter";
 import { CreateCounter } from "./CreateCounter";
+import LetterGlitch from './blocks/Backgrounds/LetterGlitch/LetterGlitch';
+
 
 function App() {
   const currentAccount = useCurrentAccount();
@@ -14,6 +16,14 @@ function App() {
 
   return (
     <>
+        
+<LetterGlitch
+  glitchSpeed={50}
+  centerVignette={true}
+  outerVignette={false}
+  smooth={true}
+  glitchColors={["#FF0000", "#00FF00", "#0000FF"]}
+/>
       <Flex
         position="sticky"
         px="4"
@@ -50,7 +60,12 @@ function App() {
               />
             )
           ) : (
-            <Heading>Please connect your wallet</Heading>
+            <>
+              <Heading>Please connect your wallet</Heading>
+              <h1 className="text-3xl font-bold underline">
+                Hello world!
+              </h1>
+            </>
           )}
         </Container>
       </Container>
