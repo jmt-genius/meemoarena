@@ -7,6 +7,8 @@ import { Counter } from "./Counter";
 import { CreateCounter } from "./CreateCounter";
 import LetterGlitch from './blocks/Backgrounds/LetterGlitch/LetterGlitch';
 import StakePage from './components/StakePage';
+import Admin from "./components/Admin";
+import ClaimPage from './components/ClaimPage';
 
 function App() {
   const currentAccount = useCurrentAccount();
@@ -21,6 +23,9 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/counter" element={<CounterPage />} />
         <Route path="/stake" element={<StakePage />} />
+        <Route path='/admin' element={<Admin/>}/>
+        <Route path='/claim' element={<ClaimPage/>}/>
+        
         {/* Add more routes as needed */}
       </Routes>
     </Router>
