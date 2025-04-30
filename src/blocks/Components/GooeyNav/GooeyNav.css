@@ -2,6 +2,26 @@
 	Installed from https://reactbits.dev/ts/default/
 */
 
+
+/*
+  Download the Juvanze font from https://www.fontspace.com/j-juvanze-font-f112038
+  Place the .ttf or .otf file in your public/fonts directory and update the src below.
+*/
+@font-face {
+  font-family: 'Juvanze';
+  src: url('/fonts/Juvanze-ovw9A.otf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body, html, #root {
+  
+  min-height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+}
+
 :root {
   --linear-ease: linear(
     0,
@@ -33,6 +53,12 @@
 
 .gooey-nav-container {
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 32px; /* smaller top padding */
+  width: 100%;
+  z-index: 10;
 }
 
 .gooey-nav-container nav {
@@ -43,18 +69,21 @@
 
 .gooey-nav-container nav ul {
   display: flex;
-  gap: 2em;
+  gap: 1.2em; /* smaller gap */
   list-style: none;
-  padding: 0 1em;
+  padding: 0 0.5em;
   margin: 0;
   position: relative;
   z-index: 3;
   color: white;
   text-shadow: 0 1px 1px hsl(205deg 30% 10% / 0.2);
+  font-family: 'Juvanze', 'Juvanze Font', 'Arial', sans-serif;
+  font-size: 1.2rem; /* smaller font size */
+  font-weight: 400;
 }
 
 .gooey-nav-container nav ul li {
-  padding: 0.6em 1em;
+  padding: 0.3em 0.7em; /* smaller padding */
   border-radius: 100vw;
   position: relative;
   cursor: pointer;
@@ -64,6 +93,7 @@
     box-shadow 0.3s ease;
   box-shadow: 0 0 0.5px 1.5px transparent;
   color: white;
+  font-family: inherit;
 }
 
 .gooey-nav-container nav ul li:focus-within:has(:focus-visible) {
@@ -85,6 +115,7 @@
 .gooey-nav-container nav ul li.active {
   color: black;
   text-shadow: none;
+  font-family: 'Juvanze', 'Juvanze Font', Arial, sans-serif;
 }
 
 .gooey-nav-container nav ul li.active::after {
@@ -231,4 +262,11 @@
     transform: scale(0);
     opacity: 0;
   }
+}
+
+.gooey-nav-container nav ul li a,
+.gooey-nav-container nav ul li .active a {
+  color: inherit;
+  text-decoration: none;
+  font-family: 'Juvanze', 'Juvanze Font', 'Arial', sans-serif;
 }

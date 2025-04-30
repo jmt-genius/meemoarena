@@ -5,6 +5,7 @@ import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { SuiClient } from '@mysten/sui/client';
 import { ConnectButton, useSignAndExecuteTransaction, useSuiClient } from '@mysten/dapp-kit';
 import { TESTNET_COUNTER_PACKAGE_ID } from '../constants';
+import { CardContainer, CardBody, CardItem } from './ui/3d-card';
 
 const COLLECTION_ID = "0xf7ba633e0120ffe942abc456f3e3642e5b27d39b691778b0774aed6ec493b163";
 const suiClient = new SuiClient({ url: 'https://fullnode.devnet.sui.io' });
@@ -159,7 +160,7 @@ function ClaimPage() {
   return (
     <Container size="3">
       <Box mb="6">
-        <Heading size="8" mb="2">Claim Rewards</Heading>
+        <Text size="8" mb="2">Claim Rewards</Text>
       </Box>
       <Box mb="4">
         <ConnectButton />
@@ -180,76 +181,79 @@ function ClaimPage() {
               0
             );
             return (
-              <Box key={poll.id?.id || idx} mb="6" style={{ border: '1px solid #eee', borderRadius: 8, padding: 16 }}>
-                <Heading size="5">{question}</Heading>
-                <Text>Total Stake: {totalStake / 1_000_000_000} SUI</Text>
-                <Box mt="2" mb="2">
-                  <Flex direction="row" gap="4" wrap="wrap">
-                    {Array.isArray(options) && options.map((option: any, oidx: number) => {
-                      const optionName = Array.isArray(option.fields?.name)
-                        ? new TextDecoder().decode(Uint8Array.from(option.fields.name))
-                        : '';
-                      return (
-                        <Box key={oidx} style={{ minWidth: 200 }}>
-                          <Text>
-                            <b>{optionName}</b> — Stake: {Number(option.fields.total_stake) / 1_000_000_000} SUI
-                          </Text>
-                        </Box>
-                      );
-                    })}
-                  </Flex>
-                </Box>
-                <RadioGroup.Root
-                  value={
-                    selectedWinners[pollId] !== undefined && selectedWinners[pollId] !== null
-                      ? String(selectedWinners[pollId])
-                      : ''
-                  }
-                  onValueChange={val => {
-                    setSelectedWinners(prev => ({ ...prev, [pollId]: Number(val) }));
-                  }}
-                >
-                  <Flex direction="row" gap="4" wrap="wrap">
-                    {Array.isArray(options) && options.map((option: any, oidx: number) => {
-                      const optionName = Array.isArray(option.fields?.name)
-                        ? new TextDecoder().decode(Uint8Array.from(option.fields.name))
-                        : '';
-                      return (
-                        <Box key={oidx} asChild style={{ minWidth: 200 }}>
-                          <label style={{ display: 'block', margin: '8px 0' }}>
-                            <RadioGroup.Item value={String(oidx)} /> {optionName}
-                          </label>
-                        </Box>
-                      );
-                    })}
-                  </Flex>
-                </RadioGroup.Root>
-                <Button
-                  type="button"
-                  size="3"
-                  variant="solid"
-                  disabled={
-                    selectedWinners[pollId] === undefined ||
-                    selectedWinners[pollId] === null ||
-                    poll.claimed
-                  }
-                  onClick={() => handleClaim(pollId)}
-                  mt="2"
-                >
-                  {poll.claimed ? 'Already Claimed' : (claimStatus[pollId] === 'waiting' ? 'Claiming...' : 'Claim')}
-                </Button>
-                {poll.claimed && (
-                  <Text color="gray" size="2" ml="2">This poll has already been claimed.</Text>
-                )}
-                {errorMessage[pollId] && (
-                  <Text color="red" size="2" ml="2">{errorMessage[pollId]}</Text>
-                )}
-                <Box mt="2">
-                  <Text size="2" color="gray">
-                    Calculation: Total Stake = sum of all option stakes. Winner is the option you select above.
-                  </Text>
-                </Box>
-              </Box>
+              <CardContainer key={poll.id?.id || idx} className="mb-6">
+                <CardBody className="w-[1000px] bg-black rounded-2xl shadow-xl flex flex-col items-center justify-between p-8 border-2 border-white">
+                  <CardItem className="mb-4 text-2xl font-bold text-center text-white">
+                    {question}
+                  </CardItem>
+                  <div className="mb-2 text-white text-lg">Total Stake: {totalStake / 1_000_000_000} SUI</div>
+                  <div className="w-full flex flex-col items-center mb-4">
+                    <div className="flex flex-row gap-8 w-full justify-center items-start mb-2">
+                      {Array.isArray(options) && options.map((option: any, oidx: number) => {
+                        const optionName = Array.isArray(option.fields?.name)
+                          ? new TextDecoder().decode(Uint8Array.from(option.fields.name))
+                          : '';
+                        return (
+                          <div key={oidx} className="flex flex-col items-center w-1/2">
+                            <span className="font-medium text-lg text-center text-white">{optionName}</span>
+                            <span className="text-xs text-gray-400">Stake: {Number(option.fields.total_stake) / 1_000_000_000} SUI</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                    <RadioGroup.Root
+                      value={
+                        selectedWinners[pollId] !== undefined && selectedWinners[pollId] !== null
+                          ? String(selectedWinners[pollId])
+                          : ''
+                      }
+                      onValueChange={val => {
+                        setSelectedWinners(prev => ({ ...prev, [pollId]: Number(val) }));
+                      }}
+                    >
+                      <div className="flex flex-row gap-8 w-full justify-center items-center">
+                        {Array.isArray(options) && options.map((option: any, oidx: number) => {
+                          const optionName = Array.isArray(option.fields?.name)
+                            ? new TextDecoder().decode(Uint8Array.from(option.fields.name))
+                            : '';
+                          return (
+                            <label key={oidx} className="flex flex-col items-center">
+                              <RadioGroup.Item value={String(oidx)} />
+                              <span className="mt-2 text-white">{optionName}</span>
+                            </label>
+                          );
+                        })}
+                      </div>
+                    </RadioGroup.Root>
+                  </div>
+                  <div className="flex flex-row items-center gap-4 w-full justify-center mt-2">
+                    <Button
+                      type="button"
+                      size="3"
+                      variant="solid"
+                      disabled={
+                        selectedWinners[pollId] === undefined ||
+                        selectedWinners[pollId] === null ||
+                        poll.claimed
+                      }
+                      onClick={() => handleClaim(pollId)}
+                    >
+                      {poll.claimed ? 'Already Claimed' : (claimStatus[pollId] === 'waiting' ? 'Claiming...' : 'Claim')}
+                    </Button>
+                    {poll.claimed && (
+                      <Text color="gray" size="2" ml="2">This poll has already been claimed.</Text>
+                    )}
+                    {errorMessage[pollId] && (
+                      <Text color="red" size="2" ml="2">{errorMessage[pollId]}</Text>
+                    )}
+                  </div>
+                  <div className="mt-2">
+                    <Text size="2" color="gray">
+                      Calculation: Total Stake = sum of all option stakes. Winner is the option you select above.
+                    </Text>
+                  </div>
+                </CardBody>
+              </CardContainer>
             );
           })}
         </form>

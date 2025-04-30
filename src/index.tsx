@@ -6,7 +6,7 @@ import { createNetworkConfig, SuiClientProvider, WalletProvider } from '@mysten/
 import { getFullnodeUrl } from '@mysten/sui/client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import '@mysten/dapp-kit/dist/index.css';
-
+import "./input.css";
 dotenv.config();
 
 // Config options for the networks you want to connect to
@@ -14,7 +14,7 @@ const { networkConfig } = createNetworkConfig({
   mainnet: { url: getFullnodeUrl('mainnet') },
   testnet: { url: getFullnodeUrl('testnet') },
 });
-
+import "./index.css";
 const queryClient = new QueryClient();
 
 const root = ReactDOM.createRoot(
@@ -27,6 +27,7 @@ root.render(
       <SuiClientProvider networks={networkConfig} defaultNetwork="mainnet">
         <WalletProvider>
           <App />
+          <h1>hi da bunda</h1>
         </WalletProvider>
       </SuiClientProvider>
     </QueryClientProvider>

@@ -3,6 +3,7 @@
 */
 
 import React, { useRef, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import "./GooeyNav.css";
 
 interface GooeyNavItem {
@@ -19,6 +20,7 @@ export interface GooeyNavProps {
   timeVariance?: number;
   colors?: number[];
   initialActiveIndex?: number;
+  className?: string;
 }
 
 const GooeyNav: React.FC<GooeyNavProps> = ({
@@ -30,6 +32,7 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
   timeVariance = 300,
   colors = [1, 2, 3, 1, 2, 3, 1, 4],
   initialActiveIndex = 0,
+  className,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const navRef = useRef<HTMLUListElement>(null);
@@ -187,7 +190,7 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
   }, [activeIndex]);
 
   return (
-    <div className="gooey-nav-container" ref={containerRef}>
+    <div className={`gooey-nav-container${className ? ' ' + className : ''}`} ref={containerRef}>
       <nav>
         <ul ref={navRef}>
           {items.map((item, index) => (
@@ -196,9 +199,15 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
               className={activeIndex === index ? "active" : ""}
               onClick={(e) => handleClick(e, index)}
             >
-              <a href={item.href} onKeyDown={(e) => handleKeyDown(e, index)}>
-                {item.label}
-              </a>
+              {item.href && !item.href.startsWith("http") && !item.href.startsWith("#") ? (
+                <Link to={item.href} onKeyDown={(e) => handleKeyDown(e, index)}>
+                  {item.label}
+                </Link>
+              ) : (
+                <a href={item.href} onKeyDown={(e) => handleKeyDown(e, index)}>
+                  {item.label}
+                </a>
+              )}
             </li>
           ))}
         </ul>

@@ -1,4 +1,4 @@
-import { Container, Heading, Card, Text, Flex, Box, Button, RadioGroup, TextField } from "@radix-ui/themes";
+import { Container, Heading, Card, Text, Flex, Box, RadioGroup, TextField } from "@radix-ui/themes";
 import { useState, useEffect } from "react";
 import { useWallet } from '@suiet/wallet-kit';
 import { Transaction } from '@mysten/sui/transactions';
@@ -8,7 +8,8 @@ import { ConnectButton, useSignAndExecuteTransaction, useSuiClient } from '@myst
 import { TESTNET_COUNTER_PACKAGE_ID } from '../constants';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { configDotenv } from "dotenv";
-
+import { Button } from "@/components/ui/button";
+import { CardContainer, CardBody, CardItem } from './ui/3d-card';
 const COLLECTION_ID = "0xf7ba633e0120ffe942abc456f3e3642e5b27d39b691778b0774aed6ec493b163"; // Replace with your PollCollection object ID
 const suiClient = new SuiClient({ url: 'https://fullnode.devnet.sui.io' }); // or your preferred network
 
@@ -119,7 +120,7 @@ function StakePage() {
   return (
     <Container size="3">
       <Box mb="6">
-        <Heading size="8" mb="2">Active Polls</Heading>
+        <Text size="7" mb="2">Active Polls</Text>
       </Box>
       <Box mb="4">
         <ConnectButton />
@@ -136,20 +137,13 @@ function StakePage() {
               : '';
             const options = poll.value.fields.options || [];
             return (
-              <Box key={poll.id?.id || idx} mb="6" style={{ border: '1px solid #eee', borderRadius: 8, padding: 16 }}>
-                <Heading size="5">{question}</Heading>
-                <RadioGroup.Root
-                  value={
-                    selectedOptions[pollId] !== undefined && selectedOptions[pollId] !== null
-                      ? String(selectedOptions[pollId])
-                      : ''
-                  }
-                  onValueChange={val => {
-                    setSelectedOptions(prev => ({ ...prev, [pollId]: Number(val) }));
-                  }}
-                >
-                  <Flex direction="row" gap="4" wrap="wrap">
-                    {Array.isArray(options) && options.map((option: any, idx: number) => {
+              <CardContainer key={poll.id?.id || idx} className="mb-6">
+                <CardBody className="w-[1000px] h-[500px] bg-black rounded-2xl shadow-xl flex flex-col items-center justify-between p-8 border-2 border-white">
+                  <CardItem className="mb-4 text-2xl font-bold text-center">
+                    {question}
+                  </CardItem>
+                  <div className="flex flex-row gap-8 w-full justify-center items-start mb-4">
+                    {Array.isArray(options) && options.map((option: any, optIdx: number) => {
                       const optionName = Array.isArray(option.fields?.name)
                         ? new TextDecoder().decode(Uint8Array.from(option.fields.name))
                         : '';
@@ -158,49 +152,60 @@ function StakePage() {
                         : '';
                       const imageUrl = cid ? `https://chocolate-worldwide-earwig-657.mypinata.cloud/ipfs/${cid}` : '';
                       return (
-                        <Box key={idx} asChild style={{ minWidth: 200 }}>
-                          <label style={{ display: 'block', margin: '8px 0' }}>
-                            {cid && (
-                              <img
-                                src={imageUrl}
-                                alt={optionName}
-                                style={{ width: '100%', maxWidth: 200, borderRadius: 8, marginBottom: 8 }}
-                              />
-                            )}
-                            <RadioGroup.Item value={String(idx)} /> {optionName} (Current Stake: {option.fields.total_stake/1000000000} SUI)
+                        <div key={optIdx} className="flex flex-col items-center w-1/2">
+                          {cid && (
+                            <img
+                              src={imageUrl}
+                              alt={optionName}
+                              className="w-56 h-56 object-cover rounded-lg mb-2"
+                            />
+                          )}
+                          <label className="flex flex-col items-center">
+                            <RadioGroup.Root
+                              value={
+                                selectedOptions[pollId] !== undefined && selectedOptions[pollId] !== null
+                                  ? String(selectedOptions[pollId])
+                                  : ''
+                              }
+                              onValueChange={val => {
+                                setSelectedOptions(prev => ({ ...prev, [pollId]: Number(val) }));
+                              }}
+                            >
+                              <RadioGroup.Item value={String(optIdx)} />
+                            </RadioGroup.Root>
+                            <span className="mt-2 font-medium text-lg text-center">{optionName}</span>
+                            <span className="text-xs text-gray-500">(Current Stake: {option.fields.total_stake/1000000000} SUI)</span>
                           </label>
-                        </Box>
+                        </div>
                       );
                     })}
-                  </Flex>
-                </RadioGroup.Root>
-                <Flex direction="row" align="center" gap="2" mt="3">
-                  <input
-                    type="number"
-                    placeholder="Amount to stake (SUI)"
-                    value={stakeAmounts[pollId] || ''}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setStakeAmounts(prev => ({ ...prev, [pollId]: e.target.value }))}
-                    min={0}
-                    style={{ width: 120, padding: 8, borderRadius: 4, border: '1px solid #ccc' }}
-                  />
-                  <Button
-                    type="button"
-                    size="3"
-                    variant="solid"
-                    disabled={
-                      selectedOptions[pollId] === undefined ||
-                      selectedOptions[pollId] === null ||
-                      !stakeAmounts[pollId]
-                    }
-                    onClick={() => handleStake(pollId)}
-                  >
-                    {stakeStatus[pollId] === 'waiting' ? 'Staking...' : 'Stake'}
-                  </Button>
-                  {errorMessage[pollId] && (
-                    <Text color="red" size="2" ml="2">{errorMessage[pollId]}</Text>
-                  )}
-                </Flex>
-              </Box>
+                  </div>
+                  <div className="flex flex-row items-center gap-4 w-full justify-center mt-2">
+                    <input
+                      type="number"
+                      placeholder="Amount to stake (SUI)"
+                      value={stakeAmounts[pollId] || ''}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setStakeAmounts(prev => ({ ...prev, [pollId]: e.target.value }))}
+                      min={0}
+                      className="w-60 p-2 rounded border border-gray-300"
+                    />
+                    <Button
+                      type="button"
+                      disabled={
+                        selectedOptions[pollId] === undefined ||
+                        selectedOptions[pollId] === null ||
+                        !stakeAmounts[pollId]
+                      }
+                      onClick={() => handleStake(pollId)}
+                    >
+                      {stakeStatus[pollId] === 'waiting' ? 'Staking...' : 'Stake'}
+                    </Button>
+                    {errorMessage[pollId] && (
+                      <Text color="red" size="2" ml="2">{errorMessage[pollId]}</Text>
+                    )}
+                  </div>
+                </CardBody>
+              </CardContainer>
             );
           })}
         </form>

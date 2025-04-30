@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Heading, Button, Flex, Box } from '@radix-ui/themes';
 import { useWallet } from '@suiet/wallet-kit';
-import { Transaction } from '@mysten/sui/transactions';
+import { TransactionBlock } from '@mysten/sui.js/transactions';
 import axios from 'axios';
 import { TESTNET_COUNTER_PACKAGE_ID } from '../constants';
 import { ConnectButton, useSignAndExecuteTransaction,useSuiClient } from '@mysten/dapp-kit';
@@ -53,7 +53,7 @@ const Admin = () => {
       const contentId1 = image1 ? await handleImageUpload(image1) : '';
       const contentId2 = image2 ? await handleImageUpload(image2) : '';
       console.log(contentId1);
-      const txb = new Transaction();
+      const txb = new TransactionBlock();
       console.log(question);
       const questionArg = txb.pure.string(question);
       const option1Arg = txb.pure.string(option1);
@@ -75,7 +75,7 @@ const Admin = () => {
       console.log("move worked");
       signAndExecute(
         {
-          transaction: txb,
+          transaction: txb.serialize(),
         },
         {
           onSuccess: async ({ digest }) => {
