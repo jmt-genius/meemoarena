@@ -9,7 +9,7 @@ import { BackgroundGradient } from "@/components/ui/background-gradient";
 
 const PACKAGE_ID = "0xc897d37de1326095701bb34eb3f9eecf8057855d981c27881b3be1f2fb262005";
 const JWT = import.meta.env.VITE_PINATA_JWT;
-const GEMINI_API_KEY = "AIzaSyASKIDur6VEDbydkALMrGTtSAMUHb1qRA0"; // Replace with your actual key
+const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY; // Replace with your actual key
 
 export default function MintAINFT() {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
