@@ -149,7 +149,6 @@ class AsciiFilter {
       this.pre.style.position = "absolute";
       this.pre.style.left = "50%";
       this.pre.style.top = "50%";
-      this.pre.style.transform = "translate(-50%, -50%)";
       this.pre.style.zIndex = "9";
       this.pre.style.backgroundAttachment = "fixed";
       this.pre.style.mixBlendMode = "difference";
