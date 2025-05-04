@@ -1,92 +1,151 @@
-# Sui dApp Starter Template
+# MeeMo Arena 🚀
 
-This dApp was created using `@mysten/create-dapp` that sets up a basic React
-Client dApp using the following tools:
+MeeMo Arena is a Web3 platform built on the Sui blockchain where meme lovers can create, stake, and earn with AI-generated NFTs. The platform combines the power of artificial intelligence with blockchain technology to create a unique and engaging experience for users.
 
-- [React](https://react.dev/) as the UI framework
-- [TypeScript](https://www.typescriptlang.org/) for type checking
-- [Vite](https://vitejs.dev/) for build tooling
-- [Radix UI](https://www.radix-ui.com/) for pre-built UI components
-- [ESLint](https://eslint.org/) for linting
-- [`@mysten/dapp-kit`](https://sdk.mystenlabs.com/dapp-kit) for connecting to
-  wallets and loading data
-- [pnpm](https://pnpm.io/) for package management
+## 🌟 Features
 
-For a full guide on how to build this dApp from scratch, visit this
-[guide](http://docs.sui.io/guides/developer/app-examples/e2e-counter#frontend).
+### AI NFT Creation 🎨
+- Generate unique NFTs using cutting-edge AI technology
+- Mint NFTs directly to the Sui blockchain
+- Participate in NFT battles
 
-## Deploying your Move code
+### Staking System 💰
+- Stake SUI tokens on community polls
+- Vote for favorite memes
+- Earn rewards for successful predictions
 
-### Install Sui cli
+### Competitive Arena 🏆
+- Enter meme battles with AI-generated NFTs
+- Compete for community votes
+- Claim victory rewards
 
-Before deploying your move code, ensure that you have installed the Sui CLI. You
-can follow the [Sui installation instruction](https://docs.sui.io/build/install)
-to get everything set up.
+## 🛠️ Technology Stack
 
-This template uses `testnet` by default, so we'll need to set up a testnet
-environment in the CLI:
+- **Frontend**: React with TypeScript
+- **Build Tool**: Vite
+- **UI Components**: Radix UI
+- **Blockchain**: Sui Network
+- **Wallet Connection**: @mysten/dapp-kit
+- **Routing**: React Router
+- **Package Manager**: pnpm
 
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js (v16 or higher)
+- pnpm package manager
+- Sui wallet (like Sui Wallet or Ethos Wallet)
+- Testnet SUI tokens (available from [Sui Faucet](https://faucet.sui.io))
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone [repository-url]
+cd meemoarena
+```
+
+2. Install dependencies:
+```bash
+pnpm install
+```
+
+3. Set up environment variables:
+Create a `.env` file in the root directory with the following variables:
+```env
+VITE_TESTNET_COUNTER_PACKAGE_ID=your_package_id
+VITE_PINATA_JWT=your_pinata_jwt
+VITE_GEMINI_API_KEY=your_gemini_api_key
+```
+
+4. Start the development server:
+```bash
+pnpm dev
+```
+
+## 🌐 Deployment
+
+The application is configured for deployment on Vercel. The `vercel.json` file handles client-side routing.
+
+### Environment Variables for Production
+
+Make sure to configure the following environment variables in your Vercel project settings:
+- `VITE_TESTNET_COUNTER_PACKAGE_ID`
+- `VITE_PINATA_JWT`
+- `VITE_GEMINI_API_KEY`
+
+## 🔧 Smart Contract Deployment
+
+### Setting up Sui CLI
+
+1. Install Sui CLI following the [official documentation](https://docs.sui.io/build/install)
+
+2. Configure testnet environment:
 ```bash
 sui client new-env --alias testnet --rpc https://fullnode.testnet.sui.io:443
 sui client switch --env testnet
 ```
 
-If you haven't set up an address in the sui client yet, you can use the
-following command to get a new address:
-
+3. Create a new address (if needed):
 ```bash
 sui client new-address secp256k1
 ```
 
-This well generate a new address and recover phrase for you. You can mark a
-newly created address as you active address by running the following command
-with your new address:
-
+4. Switch to your address:
 ```bash
-sui client switch --address 0xYOUR_ADDRESS...
+sui client switch --address 0xYOUR_ADDRESS
 ```
 
-We can ensure we have some Sui in our new wallet by requesting Sui from the
-faucet `https://faucet.sui.io`.
+### Publishing the Move Package
 
-### Publishing the move package
-
-The move code for this template is located in the `move` directory. To publish
-it, you can enter the `move` directory, and publish it with the Sui CLI:
-
+1. Navigate to the Move directory:
 ```bash
 cd move
+```
+
+2. Publish the package:
+```bash
 sui client publish --gas-budget 100000000 counter
 ```
 
-In the output there will be an object with a `"packageId"` property. You'll want
-to save that package ID to the `src/constants.ts` file as `PACKAGE_ID`:
+3. Update the package ID in your environment variables.
 
-```ts
-export const TESTNET_COUNTER_PACKAGE_ID = "<YOUR_PACKAGE_ID>";
-```
+## 📱 Features Overview
 
-Now that we have published the move code, and update the package ID, we can
-start the app.
+### Home Page
+- Modern UI with animated components
+- Platform feature showcase
+- Sui blockchain integration details
 
-## Starting your dApp
+### Stake Page
+- Meme staking interface
+- Community polls
+- Reward system
 
-To install dependencies you can run
+### Claim Page
+- Reward claiming interface
+- Transaction history
+- Stake management
 
-```bash
-pnpm install
-```
+### NFT Battle Page
+- AI NFT generation
+- Battle system
+- Voting mechanism
 
-To start your dApp in development mode run
+## 🤝 Contributing
 
-```bash
-pnpm dev
-```
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-## Building
+## 📄 License
 
-To build your app for deployment you can run
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-```bash
-pnpm build
-```
+## ⚡ Powered by Sui
+
+MeeMo Arena leverages Sui blockchain's features:
+- Lightning-fast transactions
+- Advanced security
+- Low gas fees
+- Object-centric architecture
+- Move language smart contracts
