@@ -158,107 +158,174 @@ function ClaimPage() {
   }
 
   return (
-    <Container size="3">
-      <Box mb="6">
-        <Text size="8" mb="2">Claim Rewards</Text>
-      </Box>
-      <Box mb="4">
-        <ConnectButton />
-      </Box>
-      {polls.length === 0 ? (
-        <Text>No polls found.</Text>
-      ) : (
-        <form onSubmit={e => { e.preventDefault(); }}>
-          {polls.map((poll, idx) => {
-            const pollId = poll.value.fields.poll_id;
-            const questionBytes = poll.value.fields.question;
-            const question = Array.isArray(questionBytes)
-              ? new TextDecoder().decode(Uint8Array.from(questionBytes))
-              : '';
-            const options = poll.value.fields.options || [];
-            const totalStake = options.reduce(
-              (sum: number, opt: any) => sum + Number(opt.fields.total_stake || 0),
-              0
-            );
-            return (
-              <CardContainer key={poll.id?.id || idx} className="mb-6">
-                <CardBody className="w-[1000px] bg-black rounded-2xl shadow-xl flex flex-col items-center justify-between p-8 border-2 border-white">
-                  <CardItem className="mb-4 text-2xl font-bold text-center text-white">
-                    {question}
-                  </CardItem>
-                  <div className="mb-2 text-white text-lg">Total Stake: {totalStake / 1_000_000_000} SUI</div>
-                  <div className="w-full flex flex-col items-center mb-4">
-                    <div className="flex flex-row gap-8 w-full justify-center items-start mb-2">
-                      {Array.isArray(options) && options.map((option: any, oidx: number) => {
-                        const optionName = Array.isArray(option.fields?.name)
-                          ? new TextDecoder().decode(Uint8Array.from(option.fields.name))
-                          : '';
-                        return (
-                          <div key={oidx} className="flex flex-col items-center w-1/2">
-                            <span className="font-medium text-lg text-center text-white">{optionName}</span>
-                            <span className="text-xs text-gray-400">Stake: {Number(option.fields.total_stake) / 1_000_000_000} SUI</span>
+    <div className="flex justify-center items-center w-full overflow-x-hidden">
+      {/* Background glow effects */}
+      <div className="fixed top-0 left-0 w-full h-full overflow-hidden z-0">
+        <div className="absolute top-[10%] left-[15%] w-[40vw] h-[40vw] rounded-full bg-purple-600/10 blur-[50px]"></div>
+        <div className="absolute bottom-[15%] right-[10%] w-[35vw] h-[35vw] rounded-full bg-pink-600/10 blur-[50px]"></div>
+        <div className="absolute top-[40%] right-[25%] w-[25vw] h-[25vw] rounded-full bg-blue-600/5 blur-[50px]"></div>
+      </div>
+
+      <section className="relative w-full min-h-screen overflow-auto bg-black/50 backdrop-blur-sm flex flex-col items-center justify-start z-[1]">
+        <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 py-16 flex flex-col items-center">
+          <div className="w-full flex flex-col items-center text-center animate-fade-in-down">
+            <h1 className="text-5xl md:text-7xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600">
+              Claim Your Rewards
+            </h1>
+            <div className="mb-12 w-full flex justify-center">
+              <p className="text-xl md:text-2xl text-gray-300 max-w-3xl leading-relaxed text-center">
+                Claim your rewards for accurately predicting winning memes. Your predictions shape the future of meme culture! 🏆
+              </p>
+            </div>
+            <div className="mb-80 pt-7" />
+            <div className="w-full max-w-5xl mb-16">
+              <div className="bg-black/20 p-8 rounded-xl border border-white/10 backdrop-blur-sm">
+                <h3 className="text-2xl font-semibold mb-6 text-white">How Claiming Works</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="space-y-4">
+                    <h4 className="text-lg font-medium text-purple-400">Claiming Process</h4>
+                    <ul className="list-disc pl-6 space-y-3 text-gray-300">
+                      <li>Select which option you believe is the winner for each poll</li>
+                      <li>Click "Claim" to submit your choice and claim your rewards if correct</li>
+                      <li>If your prediction matches the community consensus, you'll receive a portion of the stake pool</li>
+                    </ul>
+                  </div>
+                  <div className="space-y-4">
+                    <h4 className="text-lg font-medium text-purple-400">Reward Distribution</h4>
+                    <ul className="list-disc pl-6 space-y-3 text-gray-300">
+                      <li>Rewards are proportional to the total stake</li>
+                      <li>Distributed automatically upon successful claim</li>
+                      <li>Once claimed, a poll cannot be claimed again</li>
+                      <li>Higher stakes lead to higher potential rewards</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="mb-80 pt-7" />
+            <div className="mb-8 w-full flex justify-center">
+              <ConnectButton />
+            </div>
+
+            {loading ? (
+              <div className="flex items-center justify-center p-8">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
+              </div>
+            ) : polls.length === 0 ? (
+              <div className="text-center p-8 bg-black/30 rounded-xl border border-white/10">
+                <Text size="4" className="text-gray-300">No active polls found</Text>
+              </div>
+            ) : (
+              <form onSubmit={e => { e.preventDefault(); }} className="w-full">
+                {polls.map((poll, idx) => {
+                  const pollId = poll.value.fields.poll_id;
+                  const questionBytes = poll.value.fields.question;
+                  const question = Array.isArray(questionBytes)
+                    ? new TextDecoder().decode(Uint8Array.from(questionBytes))
+                    : '';
+                  const options = poll.value.fields.options || [];
+                  const totalStake = options.reduce(
+                    (sum: number, opt: any) => sum + Number(opt.fields.total_stake || 0),
+                    0
+                  );
+                  return (
+                    <CardContainer key={poll.id?.id || idx} className="mb-6 pb-[80px]">
+                      <CardBody className="w-[1000px] h-[500px] bg-black/80 rounded-2xl shadow-xl flex flex-col items-center justify-between p-8 border-2 border-white/20">
+                        <CardItem translateZ="60" className="mb-4 text-2xl font-bold text-center text-white">
+                          {question}
+                        </CardItem>
+                        <CardItem translateZ="60" className="mb-2 text-white text-lg">
+                          Total Stake: {totalStake / 1_000_000_000} SUI
+                        </CardItem>
+                        <CardItem translateZ="60" className="w-full flex flex-col items-center mb-4">
+                          <div className="flex flex-row gap-8 w-full justify-center items-start mb-2">
+                            {Array.isArray(options) && options.map((option: any, oidx: number) => {
+                              const optionName = Array.isArray(option.fields?.name)
+                                ? new TextDecoder().decode(Uint8Array.from(option.fields.name))
+                                : '';
+                              const cid = Array.isArray(option.fields?.content_id)
+                                ? new TextDecoder().decode(Uint8Array.from(option.fields.content_id))
+                                : '';
+                              const imageUrl = cid ? `https://chocolate-worldwide-earwig-657.mypinata.cloud/ipfs/${cid}` : '';
+                              return (
+                                <div key={oidx} className="flex flex-col items-center w-1/2">
+                                  {cid && (
+                                    <img
+                                      src={imageUrl}
+                                      alt={optionName}
+                                      className="w-56 h-56 object-cover rounded-lg mb-2"
+                                    />
+                                  )}
+                                  <span className="font-medium text-lg text-center text-white">{optionName}</span>
+                                  <span className="text-xs text-gray-400">Stake: {Number(option.fields.total_stake) / 1_000_000_000} SUI</span>
+                                </div>
+                              );
+                            })}
                           </div>
-                        );
-                      })}
-                    </div>
-                    <RadioGroup.Root
-                      value={
-                        selectedWinners[pollId] !== undefined && selectedWinners[pollId] !== null
-                          ? String(selectedWinners[pollId])
-                          : ''
-                      }
-                      onValueChange={val => {
-                        setSelectedWinners(prev => ({ ...prev, [pollId]: Number(val) }));
-                      }}
-                    >
-                      <div className="flex flex-row gap-8 w-full justify-center items-center">
-                        {Array.isArray(options) && options.map((option: any, oidx: number) => {
-                          const optionName = Array.isArray(option.fields?.name)
-                            ? new TextDecoder().decode(Uint8Array.from(option.fields.name))
-                            : '';
-                          return (
-                            <label key={oidx} className="flex flex-col items-center">
-                              <RadioGroup.Item value={String(oidx)} />
-                              <span className="mt-2 text-white">{optionName}</span>
-                            </label>
-                          );
-                        })}
-                      </div>
-                    </RadioGroup.Root>
-                  </div>
-                  <div className="flex flex-row items-center gap-4 w-full justify-center mt-2">
-                    <Button
-                      type="button"
-                      size="3"
-                      variant="solid"
-                      disabled={
-                        selectedWinners[pollId] === undefined ||
-                        selectedWinners[pollId] === null ||
-                        poll.claimed
-                      }
-                      onClick={() => handleClaim(pollId)}
-                    >
-                      {poll.claimed ? 'Already Claimed' : (claimStatus[pollId] === 'waiting' ? 'Claiming...' : 'Claim')}
-                    </Button>
-                    {poll.claimed && (
-                      <Text color="gray" size="2" ml="2">This poll has already been claimed.</Text>
-                    )}
-                    {errorMessage[pollId] && (
-                      <Text color="red" size="2" ml="2">{errorMessage[pollId]}</Text>
-                    )}
-                  </div>
-                  <div className="mt-2">
-                    <Text size="2" color="gray">
-                      Calculation: Total Stake = sum of all option stakes. Winner is the option you select above.
-                    </Text>
-                  </div>
-                </CardBody>
-              </CardContainer>
-            );
-          })}
-        </form>
-      )}
-    </Container>
+                          <CardItem translateZ="10" className="w-full mt-4">
+                            <RadioGroup.Root
+                              value={
+                                selectedWinners[pollId] !== undefined && selectedWinners[pollId] !== null
+                                  ? String(selectedWinners[pollId])
+                                  : ''
+                              }
+                              onValueChange={val => {
+                                setSelectedWinners(prev => ({ ...prev, [pollId]: Number(val) }));
+                              }}
+                            >
+                              <div className="flex flex-row gap-8 w-full justify-center items-center">
+                                {Array.isArray(options) && options.map((option: any, oidx: number) => {
+                                  const optionName = Array.isArray(option.fields?.name)
+                                    ? new TextDecoder().decode(Uint8Array.from(option.fields.name))
+                                    : '';
+                                  return (
+                                    <label key={oidx} className="flex flex-col items-center">
+                                      <RadioGroup.Item value={String(oidx)} className="w-5 h-5 rounded-full border-2 border-purple-500 checked:bg-purple-500 transition-colors" />
+                                      <span className="mt-2 text-white">{optionName}</span>
+                                    </label>
+                                  );
+                                })}
+                              </div>
+                            </RadioGroup.Root>
+                          </CardItem>
+                        </CardItem>
+                        <CardItem translateZ="60" className="flex flex-row items-center gap-4 w-full justify-center mt-2">
+                          <Button
+                            type="button"
+                            size="3"
+                            variant="solid"
+                            disabled={
+                              selectedWinners[pollId] === undefined ||
+                              selectedWinners[pollId] === null ||
+                              poll.claimed
+                            }
+                            onClick={() => handleClaim(pollId)}
+                            className="px-6 py-2 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg font-medium text-white hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                          >
+                            {poll.claimed ? 'Already Claimed' : (claimStatus[pollId] === 'waiting' ? 'Claiming...' : 'Claim')}
+                          </Button>
+                          {poll.claimed && (
+                            <Text color="gray" size="2" ml="2">This poll has already been claimed.</Text>
+                          )}
+                          {errorMessage[pollId] && (
+                            <Text color="red" size="2" ml="2">{errorMessage[pollId]}</Text>
+                          )}
+                        </CardItem>
+                        <CardItem translateZ="60" className="mt-2">
+                          <Text size="2" color="gray">
+                            Calculation: Total Stake = sum of all option stakes. Winner is the option you select above.
+                          </Text>
+                        </CardItem>
+                      </CardBody>
+                    </CardContainer>
+                  );
+                })}
+              </form>
+            )}
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }
 

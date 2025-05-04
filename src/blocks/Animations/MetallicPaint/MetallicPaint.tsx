@@ -1,11 +1,10 @@
 /*
-	Installed from https://reactbits.dev/ts/default/
+	Installed from https://reactbits.dev/ts/tailwind/
 */
 
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import "./MetallicPaint.css";
 
 type ShaderParams = {
   patternScale: number;
@@ -604,5 +603,7 @@ export default function MetallicPaint({
     };
   }, [gl, uniforms, imageData]);
 
-  return <canvas ref={canvasRef} className="paint-container" />;
+  return (
+    <canvas ref={canvasRef} className="block w-full h-full object-contain" />
+  );
 }

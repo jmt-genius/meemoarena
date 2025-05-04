@@ -118,99 +118,147 @@ function StakePage() {
   }
 
   return (
-    <Container size="3">
-      <Box mb="6">
-        <Text size="7" mb="2">Active Polls</Text>
-      </Box>
-      <Box mb="4">
-        <ConnectButton />
-      </Box>
-      {polls.length === 0 ? (
-        <Text>No active polls found.</Text>
-      ) : (
-        <form onSubmit={e => { e.preventDefault(); }}>
-          {polls.map((poll, idx) => {
-            const pollId = poll.value.fields.poll_id;
-            const questionBytes = poll.value.fields.question;
-            const question = Array.isArray(questionBytes)
-              ? new TextDecoder().decode(Uint8Array.from(questionBytes))
-              : '';
-            const options = poll.value.fields.options || [];
-            return (
-              <CardContainer key={poll.id?.id || idx} className="mb-6">
-                <CardBody className="w-[1000px] h-[500px] bg-black rounded-2xl shadow-xl flex flex-col items-center justify-between p-8 border-2 border-white">
-                  <CardItem className="mb-4 text-2xl font-bold text-center">
-                    {question}
-                  </CardItem>
-                  <div className="flex flex-row gap-8 w-full justify-center items-start mb-4">
-                    {Array.isArray(options) && options.map((option: any, optIdx: number) => {
-                      const optionName = Array.isArray(option.fields?.name)
-                        ? new TextDecoder().decode(Uint8Array.from(option.fields.name))
-                        : '';
-                      const cid = Array.isArray(option.fields?.content_id)
-                        ? new TextDecoder().decode(Uint8Array.from(option.fields.content_id))
-                        : '';
-                      const imageUrl = cid ? `https://chocolate-worldwide-earwig-657.mypinata.cloud/ipfs/${cid}` : '';
-                      return (
-                        <div key={optIdx} className="flex flex-col items-center w-1/2">
-                          {cid && (
-                            <img
-                              src={imageUrl}
-                              alt={optionName}
-                              className="w-56 h-56 object-cover rounded-lg mb-2"
-                            />
+    <div className="flex justify-center items-center w-full overflow-x-hidden">
+      {/* Background glow effects */}
+      <div className="fixed top-0 left-0 w-full h-full overflow-hidden z-0">
+        <div className="absolute top-[10%] left-[15%] w-[40vw] h-[40vw] rounded-full bg-purple-600/10 blur-[50px]"></div>
+        <div className="absolute bottom-[15%] right-[10%] w-[35vw] h-[35vw] rounded-full bg-pink-600/10 blur-[50px]"></div>
+        <div className="absolute top-[40%] right-[25%] w-[25vw] h-[25vw] rounded-full bg-blue-600/5 blur-[50px]"></div>
+      </div>
+
+      <section className="relative w-full min-h-screen overflow-auto bg-black/50 backdrop-blur-sm flex flex-col items-center justify-start z-[1]">
+        <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 py-16 flex flex-col items-center">
+          <div className="w-full flex flex-col items-center text-center animate-fade-in-down">
+            <h1 className="text-5xl md:text-7xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600">
+              Stake Your Memes
+            </h1>
+            <div className="mb-12 w-full flex justify-center">
+              <p className="text-xl md:text-2xl text-gray-300 max-w-3xl leading-relaxed text-center">
+                Back your favorite memes with SUI tokens and earn rewards when they win. Join the community in deciding the next viral sensation! 🚀
+              </p>
+            </div>
+
+            <div className="w-full max-w-5xl mb-16">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div className="bg-black/20 p-6 rounded-xl border border-white/10 backdrop-blur-sm">
+                  <h3 className="text-xl font-semibold mb-4 text-white">How Staking Works:</h3>
+                  <ol className="list-decimal pl-6 space-y-2 text-gray-300">
+                    <li>Select your favorite option in a poll</li>
+                    <li>Enter the amount of SUI you want to stake</li>
+                    <li>Click "Stake" to confirm your choice</li>
+                    <li>Your stake increases the option's total stake</li>
+                    <li>If your option wins, you'll earn rewards proportional to your stake</li>
+                  </ol>
+                </div>
+                
+                <div className="bg-black/20 p-6 rounded-xl border border-white/10 backdrop-blur-sm">
+                  <h3 className="text-xl font-semibold mb-4 text-white">Rewards System:</h3>
+                  <ul className="list-disc pl-6 space-y-2 text-gray-300">
+                    <li>Total rewards pool grows with each stake</li>
+                    <li>Winners share the rewards based on their stake percentage</li>
+                    <li>Claim your rewards on the Claim page after voting ends</li>
+                    <li>Higher stakes = Higher potential rewards</li>
+                    <li>Choose wisely to maximize your returns!</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div className="mb-80 pt-7" />
+            <div className="mb-8 w-full flex justify-center">
+              <ConnectButton />
+            </div>
+
+            {polls.length === 0 ? (
+              <div className="text-center p-8 bg-black/30 rounded-xl border border-white/10">
+                <Text size="4" className="text-gray-300">No active polls found</Text>
+              </div>
+            ) : (
+              <form onSubmit={e => { e.preventDefault(); }} className="w-full">
+                {polls.map((poll, idx) => {
+                  const pollId = poll.value.fields.poll_id;
+                  const questionBytes = poll.value.fields.question;
+                  const question = Array.isArray(questionBytes)
+                    ? new TextDecoder().decode(Uint8Array.from(questionBytes))
+                    : '';
+                  const options = poll.value.fields.options || [];
+                  return (
+                    <CardContainer key={poll.id?.id || idx} className="mb-6">
+                      <CardBody className="w-[1000px] h-[500px] bg-black/80 rounded-2xl shadow-xl flex flex-col items-center justify-between p-8 border-2 border-white/20">
+                        <CardItem className="mb-4 text-2xl font-bold text-center" translateZ="60" >
+                          {question}
+                        </CardItem>
+                        <CardItem translateZ="60" className="flex flex-row gap-8 w-full justify-center items-start mb-4">
+                          {Array.isArray(options) && options.map((option: any, optIdx: number) => {
+                            const optionName = Array.isArray(option.fields?.name)
+                              ? new TextDecoder().decode(Uint8Array.from(option.fields.name))
+                              : '';
+                            const cid = Array.isArray(option.fields?.content_id)
+                              ? new TextDecoder().decode(Uint8Array.from(option.fields.content_id))
+                              : '';
+                            const imageUrl = cid ? `https://chocolate-worldwide-earwig-657.mypinata.cloud/ipfs/${cid}` : '';
+                            return (
+                              <div key={optIdx} className="flex flex-col items-center w-1/2">
+                                {cid && (
+                                  <img
+                                    src={imageUrl}
+                                    alt={optionName}
+                                    className="w-56 h-56 object-cover rounded-lg mb-2"
+                                  />
+                                )}
+                                <label className="flex flex-col items-center">
+                                  <RadioGroup.Root
+                                    value={
+                                      selectedOptions[pollId] !== undefined && selectedOptions[pollId] !== null
+                                        ? String(selectedOptions[pollId])
+                                        : ''
+                                    }
+                                    onValueChange={val => {
+                                      setSelectedOptions(prev => ({ ...prev, [pollId]: Number(val) }));
+                                    }}
+                                  >
+                                    <RadioGroup.Item value={String(optIdx)} />
+                                  </RadioGroup.Root>
+                                  <span className="mt-2 font-medium text-lg text-center">{optionName}</span>
+                                  <span className="text-xs text-gray-500">(Current Stake: {option.fields.total_stake/1000000000} SUI)</span>
+                                </label>
+                              </div>
+                            );
+                          })}
+                        </CardItem>
+                        <CardItem translateZ="60" className="flex flex-row items-center gap-4 w-full justify-center mt-2">
+                          <input
+                            type="number"
+                            placeholder="Amount to stake (SUI)"
+                            value={stakeAmounts[pollId] || ''}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setStakeAmounts(prev => ({ ...prev, [pollId]: e.target.value }))}
+                            min={0}
+                            className="w-60 p-2 rounded border border-gray-300 bg-black/40 text-white"
+                          />
+                          <Button
+                            type="button"
+                            disabled={
+                              selectedOptions[pollId] === undefined ||
+                              selectedOptions[pollId] === null ||
+                              !stakeAmounts[pollId]
+                            }
+                            onClick={() => handleStake(pollId)}
+                          >
+                            {stakeStatus[pollId] === 'waiting' ? 'Staking...' : 'Stake'}
+                          </Button>
+                          {errorMessage[pollId] && (
+                            <Text color="red" size="2" ml="2">{errorMessage[pollId]}</Text>
                           )}
-                          <label className="flex flex-col items-center">
-                            <RadioGroup.Root
-                              value={
-                                selectedOptions[pollId] !== undefined && selectedOptions[pollId] !== null
-                                  ? String(selectedOptions[pollId])
-                                  : ''
-                              }
-                              onValueChange={val => {
-                                setSelectedOptions(prev => ({ ...prev, [pollId]: Number(val) }));
-                              }}
-                            >
-                              <RadioGroup.Item value={String(optIdx)} />
-                            </RadioGroup.Root>
-                            <span className="mt-2 font-medium text-lg text-center">{optionName}</span>
-                            <span className="text-xs text-gray-500">(Current Stake: {option.fields.total_stake/1000000000} SUI)</span>
-                          </label>
-                        </div>
-                      );
-                    })}
-                  </div>
-                  <div className="flex flex-row items-center gap-4 w-full justify-center mt-2">
-                    <input
-                      type="number"
-                      placeholder="Amount to stake (SUI)"
-                      value={stakeAmounts[pollId] || ''}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setStakeAmounts(prev => ({ ...prev, [pollId]: e.target.value }))}
-                      min={0}
-                      className="w-60 p-2 rounded border border-gray-300"
-                    />
-                    <Button
-                      type="button"
-                      disabled={
-                        selectedOptions[pollId] === undefined ||
-                        selectedOptions[pollId] === null ||
-                        !stakeAmounts[pollId]
-                      }
-                      onClick={() => handleStake(pollId)}
-                    >
-                      {stakeStatus[pollId] === 'waiting' ? 'Staking...' : 'Stake'}
-                    </Button>
-                    {errorMessage[pollId] && (
-                      <Text color="red" size="2" ml="2">{errorMessage[pollId]}</Text>
-                    )}
-                  </div>
-                </CardBody>
-              </CardContainer>
-            );
-          })}
-        </form>
-      )}
-    </Container>
+                        </CardItem>
+                      </CardBody>
+                    </CardContainer>
+                  );
+                })}
+              </form>
+            )}
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }
 
