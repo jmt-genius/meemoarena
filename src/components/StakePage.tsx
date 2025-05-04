@@ -7,11 +7,13 @@ import { type SuiTransactionBlockResponse } from '@mysten/sui/client';
 import { ConnectButton, useSignAndExecuteTransaction, useSuiClient } from '@mysten/dapp-kit';
 import { TESTNET_COUNTER_PACKAGE_ID } from '../constants';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
-import { configDotenv } from "dotenv";
 import { Button } from "@/components/ui/button";
 import { CardContainer, CardBody, CardItem } from './ui/3d-card';
-const COLLECTION_ID = "0xf7ba633e0120ffe942abc456f3e3642e5b27d39b691778b0774aed6ec493b163"; // Replace with your PollCollection object ID
-const suiClient = new SuiClient({ url: 'https://fullnode.devnet.sui.io' }); // or your preferred network
+
+// Use environment variables with fallback values
+const COLLECTION_ID = "0xf7ba633e0120ffe942abc456f3e3642e5b27d39b691778b0774aed6ec493b163";
+const NETWORK_URL = import.meta.env.VITE_NETWORK_URL || 'https://fullnode.testnet.sui.io';
+const suiClient = new SuiClient({ url: NETWORK_URL });
 
 function StakePage() {
   const [polls, setPolls] = useState<any[]>([]);

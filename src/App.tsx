@@ -1,5 +1,5 @@
 "use client";
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import { ConnectButton, useCurrentAccount } from "@mysten/dapp-kit";
 import { isValidSuiObjectId } from "@mysten/sui/utils";
 import { Box, Container, Flex, Heading } from "@radix-ui/themes";
@@ -74,14 +74,14 @@ function NavbarDemo() {
             onClose={() => setIsMobileMenuOpen(false)}
           >
             {navItems.map((item, idx) => (
-              <a
+              <Link
                 key={`mobile-link-${idx}`}
-                href={item.link}
+                to={item.link}
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="relative text-neutral-600 dark:text-neutral-300"
               >
                 <span className="block">{item.name}</span>
-              </a>
+              </Link>
             ))}
             <div className="flex w-full flex-col gap-4">
               <ConnectButton />
@@ -190,14 +190,20 @@ function Home({ isLoaded }: { isLoaded: boolean }) {
             <div className="mb-80 pt-7" />
             <div className="mb-40 w-full flex justify-center">
               <div className="flex flex-wrap justify-center gap-10">
-                <a href="/nftbattle" className="px-10 py-5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full font-medium text-white hover:opacity-90 transition-opacity animate-pulse flex items-center gap-2 text-lg">
+                <Link
+                  to="/nftbattle"
+                  className="px-10 py-5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full font-medium text-white hover:opacity-90 transition-opacity animate-pulse flex items-center gap-2 text-lg"
+                >
                   <span>Start Creating NFTs</span>
                   <span className="text-xl">→</span>
-                </a>
-                <a href="/stake" className="px-10 py-5 bg-black/40 border border-white/30 backdrop-blur-sm rounded-full font-medium text-white hover:bg-black/60 transition-all flex items-center gap-2 text-lg">
+                </Link>
+                <Link
+                  to="/stake"
+                  className="px-10 py-5 bg-black/40 border border-white/30 backdrop-blur-sm rounded-full font-medium text-white hover:bg-black/60 transition-all flex items-center gap-2 text-lg"
+                >
                   <span>Explore Polls</span>
                   <span className="text-xl">⭐</span>
-                </a>
+                </Link>
               </div>
             </div>
           </div>
