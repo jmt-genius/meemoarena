@@ -196,11 +196,12 @@ function ClaimPage() {
     }
   };
 
-  const calculateProfit = (totalStake: number, userStake: number) => {
-    // Calculate profit based on user's stake percentage
-    const stakePercentage = (userStake / totalStake) * 100;
-    const profit = (totalStake * stakePercentage) / 100;
-    return profit / 1_000_000_000; // Convert from MIST to SUI
+  const calculateProfit = (pollTotalStake: number, optionTotalStake: number, userStake: number) => {
+    // Calculate reward proportionally based on user's stake percentage in the winning option
+    const rewardAmount = (BigInt(userStake) * BigInt(pollTotalStake)) / BigInt(optionTotalStake);
+    
+    // Convert from MIST to SUI
+    return Number(rewardAmount) / 1_000_000_000;
   };
 
   if (loading) {
@@ -380,8 +381,12 @@ function ClaimPage() {
                                 <DialogDescription>
                                   <div className="mt-4 space-y-4">
                                     <div className="flex justify-between">
-                                      <span>Total Stake:</span>
+                                      <span>Total Poll Stake:</span>
                                       <span>{totalStake / 1_000_000_000} SUI</span>
+                                    </div>
+                                    <div className="flex justify-between">
+                                      <span>Option Total Stake:</span>
+                                      <span>{options[selectedWinners[pollId] || 0]?.fields.total_stake / 1_000_000_000} SUI</span>
                                     </div>
                                     <div className="flex justify-between">
                                       <span>Your Stake:</span>
@@ -389,10 +394,15 @@ function ClaimPage() {
                                         {selectedPollForDialog?.userStake ? selectedPollForDialog.userStake / 1_000_000_000 : 0} SUI
                                       </span>
                                     </div>
+                                    <div className="mb-80 pt-7" />
                                     <div className="flex justify-between font-bold">
                                       <span>Estimated Profit:</span>
                                       <span className="text-green-500">
-                                        {calculateProfit(totalStake, selectedPollForDialog?.userStake || 0)} SUI
+                                        {calculateProfit(
+                                          totalStake,
+                                          options[selectedWinners[pollId] || 0]?.fields.total_stake || 0,
+                                          selectedPollForDialog?.userStake || 0
+                                        )} SUI
                                       </span>
                                     </div>
                                     <div className="mb-80 pt-7" />

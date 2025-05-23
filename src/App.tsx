@@ -10,6 +10,7 @@ import LetterGlitch from './blocks/Backgrounds/LetterGlitch/LetterGlitch';
 import StakePage from './components/StakePage';
 import Admin from "./components/Admin";
 import ClaimPage from './components/ClaimPage';
+import { MacbookScroll } from "@/components/ui/macbook-scroll";
 import {
   Navbar,
   NavBody,
@@ -206,6 +207,24 @@ function Home({ isLoaded }: { isLoaded: boolean }) {
                 </Link>
               </div>
             </div>
+          </div>
+          
+          {/* MacbookScroll Section */}
+          <div className="overflow-hidden w-full">
+            <MacbookScroll
+              title={
+                <span>
+                  "Stake. Battle. Earn. Repeat."<br/><br/>.
+                </span>
+              }
+              badge={
+                <div className="h-10 w-10 transform -rotate-12">
+                  <img src={`/icon/icon.svg`} alt="MeeMo Arena Logo" className="w-full h-full" />
+                </div>
+              }
+              src={`/images/preview.png`}
+              showGradient={false}
+            />
           </div>
           
           {/* About Sui Content */}
