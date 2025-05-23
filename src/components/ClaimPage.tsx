@@ -20,7 +20,7 @@ const suiClient = new SuiClient({ url: 'https://fullnode.devnet.sui.io' });
 
 // Twitter API configuration
 const TWITTER_API_URL = 'https://api.twitter.com/2/tweets/counts/recent';
-const TWITTER_BEARER_TOKEN = 'AAAAAAAAAAAAAAAAAAAAAKoZ1QEAAAAACHNy%2BqnC0%2FnHn%2BRcQRwowY89szY%3DDlciX5Qadv6XMkrmDUX6SwFhiSytiW2IWc7WnOph8Q2P60DKaE';
+const TWITTER_BEARER_TOKEN = '';
 
 async function fetchHashtagCount(hashtag: string) {
   try {
