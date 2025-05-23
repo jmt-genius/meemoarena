@@ -14,43 +14,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-
 const COLLECTION_ID = "0xf7ba633e0120ffe942abc456f3e3642e5b27d39b691778b0774aed6ec493b163";
-const suiClient = new SuiClient({ url: 'https://fullnode.devnet.sui.io' });
-
-// Twitter API configuration
-const TWITTER_API_URL = 'https://api.twitter.com/2/tweets/counts/recent';
-const TWITTER_BEARER_TOKEN = '';
-
-async function fetchHashtagCount(hashtag: string) {
-  try {
-    const options = {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${TWITTER_BEARER_TOKEN}`
-      }
-    };
-
-    const response = await fetch(
-      `${TWITTER_API_URL}?granularity=day&query=%23${hashtag}`,
-      options
-    );
-    
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    
-    const data = await response.json();
-    console.log(`Full response for #${hashtag}:`, JSON.stringify(data, null, 2));
-    
-    // Sum up all tweet counts from the data array
-    const totalCount = data.data.reduce((sum: number, item: any) => sum + item.tweet_count, 0);
-    return totalCount;
-  } catch (error) {
-    console.error(`Error fetching ${hashtag} count:`, error);
-    return 0;
-  }
-}
 
 function ClaimPage() {
   const [polls, setPolls] = useState<any[]>([]);
@@ -70,23 +34,8 @@ function ClaimPage() {
   useEffect(() => {
     if (account?.address) {
       fetchPolls();
-      fetchHashtagStats();
     }
   }, [account?.address]);
-
-  const fetchHashtagStats = async () => {
-    try {
-      console.log('Fetching hashtag statistics...');
-      const dogCount = await fetchHashtagCount('dog');
-      const catCount = await fetchHashtagCount('cat');
-      
-      console.log('\nHashtag Statistics Summary (Last 7 days):');
-      console.log('#dog posts:', dogCount);
-      console.log('#cat posts:', catCount);
-    } catch (error) {
-      console.error('Error fetching hashtag statistics:', error);
-    }
-  };
 
   const fetchPolls = async () => {
     setLoading(true);
@@ -246,13 +195,20 @@ function ClaimPage() {
     }
   };
 
+  // ... existing code ...
   const calculateProfit = (pollTotalStake: number, optionTotalStake: number, userStake: number) => {
+    // Return 0 if any input is 0 to avoid division by zero
+    if (pollTotalStake === 0 || optionTotalStake === 0 || userStake === 0) {
+      return 0;
+    }
+    
     // Calculate reward proportionally based on user's stake percentage in the winning option
     const rewardAmount = (BigInt(userStake) * BigInt(pollTotalStake)) / BigInt(optionTotalStake);
     
     // Convert from MIST to SUI
     return Number(rewardAmount) / 1_000_000_000;
   };
+// ... existing code ...
 
   if (loading) {
     return (
