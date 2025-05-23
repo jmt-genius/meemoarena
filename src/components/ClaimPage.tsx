@@ -1,12 +1,19 @@
-import { Container, Heading, Text, Flex, Box, Button, RadioGroup } from "@radix-ui/themes";
+import { Container, Heading, Text, Flex, Box, RadioGroup } from "@radix-ui/themes";
 import { useState, useEffect } from "react";
-import { useWallet } from '@suiet/wallet-kit';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { SuiClient } from '@mysten/sui/client';
-import { ConnectButton, useSignAndExecuteTransaction, useSuiClient } from '@mysten/dapp-kit';
+import { ConnectButton, useSignAndExecuteTransaction, useSuiClient, useCurrentAccount } from '@mysten/dapp-kit';
 import { TESTNET_COUNTER_PACKAGE_ID } from '../constants';
 import { CardContainer, CardBody, CardItem } from './ui/3d-card';
-
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 const COLLECTION_ID = "0xf7ba633e0120ffe942abc456f3e3642e5b27d39b691778b0774aed6ec493b163";
 const suiClient = new SuiClient({ url: 'https://fullnode.devnet.sui.io' });
 
@@ -14,16 +21,22 @@ function ClaimPage() {
   const [polls, setPolls] = useState<any[]>([]);
   const [selectedWinners, setSelectedWinners] = useState<{ [pollId: string]: number | null }>({});
   const [loading, setLoading] = useState(true);
-  const wallet = useWallet();
+  const account = useCurrentAccount();
   const { mutate: signAndExecute } = useSignAndExecuteTransaction();
   const suiClient = useSuiClient();
   const [claimStatus, setClaimStatus] = useState<{ [pollId: string]: string }>({});
   const [errorMessage, setErrorMessage] = useState<{ [pollId: string]: string | null }>({});
   const [tableId, setTableId] = useState<string | null>(null);
+  const [userStakes, setUserStakes] = useState<{ [pollId: string]: { [optionIndex: number]: number } }>({});
+  const [selectedPollForDialog, setSelectedPollForDialog] = useState<{ pollId: string, totalStake: number, userStake: number } | null>(null);
+
+  console.log('address', account?.address);
 
   useEffect(() => {
-    fetchPolls();
-  }, []);
+    if (account?.address) {
+      fetchPolls();
+    }
+  }, [account?.address]);
 
   const fetchPolls = async () => {
     setLoading(true);
@@ -39,16 +52,50 @@ function ClaimPage() {
       if (!tableId) return;
 
       const pollsFetched: any[] = [];
+      const userStakesFetched: { [pollId: string]: { [optionIndex: number]: number } } = {};
+
       for (let i = 0; i < nextPollId; i++) {
         const { data: pollData } = await suiClient.getDynamicFieldObject({
           parentId: tableId,
           name: { type: 'u64', value: i.toString() }
         });
+
         if (pollData?.content?.dataType === "moveObject" && pollData.content.fields) {
           pollsFetched.push(pollData.content.fields);
+          
+          // Get user stakes for each option in the poll
+          const options = (pollData.content.fields as any).value?.fields?.options;
+          userStakesFetched[i] = {};
+          
+          for (let optIdx = 0; optIdx < options.length; optIdx++) {
+            const option = options[optIdx];
+            const userStakesTable = option.fields.user_stakes;
+            
+            if (account?.address && userStakesTable) {
+              try {
+                const { data: userStakeData } = await suiClient.getDynamicFieldObject({
+                  parentId: userStakesTable.fields.id.id,
+                  name: { type: 'address', value: account.address }
+                });
+                
+                if (userStakeData?.content?.dataType === "moveObject") {
+                  userStakesFetched[i][optIdx] = Number((userStakeData.content.fields as any).value);
+                } else {
+                  userStakesFetched[i][optIdx] = 0;
+                }
+              } catch (error) {
+                userStakesFetched[i][optIdx] = 0;
+              }
+            }
+          }
         }
       }
+      
+      console.log('Fetched polls:', pollsFetched);
+      console.log('Fetched user stakes:', userStakesFetched);
+      
       setPolls(pollsFetched);
+      setUserStakes(userStakesFetched);
       setTableId(tableId);
     } catch (error) {
       console.error('Error fetching polls:', error);
@@ -147,6 +194,13 @@ function ClaimPage() {
       setErrorMessage(prev => ({ ...prev, [pollId]: error instanceof Error ? error.message : 'Failed to claim' }));
       setClaimStatus(prev => ({ ...prev, [pollId]: 'error' }));
     }
+  };
+
+  const calculateProfit = (totalStake: number, userStake: number) => {
+    // Calculate profit based on user's stake percentage
+    const stakePercentage = (userStake / totalStake) * 100;
+    const profit = (totalStake * stakePercentage) / 100;
+    return profit / 1_000_000_000; // Convert from MIST to SUI
   };
 
   if (loading) {
@@ -257,7 +311,11 @@ function ClaimPage() {
                                     />
                                   )}
                                   <span className="font-medium text-lg text-center text-white">{optionName}</span>
-                                  <span className="text-xs text-gray-400">Stake: {Number(option.fields.total_stake) / 1_000_000_000} SUI</span>
+                                  {userStakes[pollId]?.[oidx] > 0 && (
+                                    <span className="text-sm text-green-500 mt-1">
+                                      Your Stake: {userStakes[pollId][oidx] / 1_000_000_000} SUI
+                                    </span>
+                                  )}
                                 </div>
                               );
                             })}
@@ -290,20 +348,69 @@ function ClaimPage() {
                           </CardItem>
                         </CardItem>
                         <CardItem translateZ="60" className="flex flex-row items-center gap-4 w-full justify-center mt-2">
-                          <Button
-                            type="button"
-                            size="3"
-                            variant="solid"
-                            disabled={
-                              selectedWinners[pollId] === undefined ||
-                              selectedWinners[pollId] === null ||
-                              poll.claimed
-                            }
-                            onClick={() => handleClaim(pollId)}
-                            className="px-6 py-2 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg font-medium text-white hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
-                          >
-                            {poll.claimed ? 'Already Claimed' : (claimStatus[pollId] === 'waiting' ? 'Claiming...' : 'Claim')}
-                          </Button>
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <Button
+                                type="button"
+                                
+                                disabled={
+                                  selectedWinners[pollId] === undefined ||
+                                  selectedWinners[pollId] === null ||
+                                  poll.claimed
+                                }
+                                onClick={() => {
+                                  const selectedOption = selectedWinners[pollId];
+                                  if (selectedOption !== null) {
+                                    const userStake = userStakes[pollId]?.[selectedOption] || 0;
+                                    setSelectedPollForDialog({
+                                      pollId,
+                                      totalStake,
+                                      userStake
+                                    });
+                                  }
+                                }}
+                                className="px-6 py-2 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg font-medium text-white hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                              >
+                                {poll.claimed ? 'Already Claimed' : (claimStatus[pollId] === 'waiting' ? 'Claiming...' : 'Claim')}
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent>
+                              <DialogHeader>
+                                <DialogTitle>Claim Rewards</DialogTitle>
+                                <DialogDescription>
+                                  <div className="mt-4 space-y-4">
+                                    <div className="flex justify-between">
+                                      <span>Total Stake:</span>
+                                      <span>{totalStake / 1_000_000_000} SUI</span>
+                                    </div>
+                                    <div className="flex justify-between">
+                                      <span>Your Stake:</span>
+                                      <span className="text-green-500">
+                                        {selectedPollForDialog?.userStake ? selectedPollForDialog.userStake / 1_000_000_000 : 0} SUI
+                                      </span>
+                                    </div>
+                                    <div className="flex justify-between font-bold">
+                                      <span>Estimated Profit:</span>
+                                      <span className="text-green-500">
+                                        {calculateProfit(totalStake, selectedPollForDialog?.userStake || 0)} SUI
+                                      </span>
+                                    </div>
+                                    <div className="mb-80 pt-7" />
+                                    <Button
+                                      onClick={() => {
+                                        if (selectedPollForDialog) {
+                                          handleClaim(selectedPollForDialog.pollId);
+                                        }
+                                      }}
+                                      className="w-full mt-4"
+                                    >
+                                      Confirm Claim
+                                    </Button>
+                                  </div>
+                                </DialogDescription>
+                              </DialogHeader>
+                            </DialogContent>
+                          </Dialog>
                           {poll.claimed && (
                             <Text color="gray" size="2" ml="2">This poll has already been claimed.</Text>
                           )}
@@ -311,11 +418,7 @@ function ClaimPage() {
                             <Text color="red" size="2" ml="2">{errorMessage[pollId]}</Text>
                           )}
                         </CardItem>
-                        <CardItem translateZ="60" className="mt-2">
-                          <Text size="2" color="gray">
-                            Calculation: Total Stake = sum of all option stakes. Winner is the option you select above.
-                          </Text>
-                        </CardItem>
+                        
                       </CardBody>
                     </CardContainer>
                   );
