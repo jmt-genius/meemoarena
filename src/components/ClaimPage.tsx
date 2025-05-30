@@ -32,9 +32,7 @@ function ClaimPage() {
   console.log('address', account?.address);
 
   useEffect(() => {
-    if (account?.address) {
-      fetchPolls();
-    }
+    fetchPolls();
   }, [account?.address]);
 
   const fetchPolls = async () => {

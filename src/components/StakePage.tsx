@@ -38,9 +38,7 @@ function StakePage() {
   console.log('address', account?.address);
 
   useEffect(() => {
-    if (account?.address) {
-      fetchPolls();
-    }
+    fetchPolls();
   }, [account?.address]);
 
   const fetchPolls = async () => {
@@ -68,15 +66,15 @@ function StakePage() {
         if (pollData?.content?.dataType === "moveObject" && pollData.content.fields) {
           pollsFetched.push(pollData.content.fields);
           
-          // Get user stakes for each option in the poll
-          const options = (pollData.content.fields as any).value?.fields?.options;
-          userStakesFetched[i] = {};
-          
-          for (let optIdx = 0; optIdx < options.length; optIdx++) {
-            const option = options[optIdx];
-            const userStakesTable = option.fields.user_stakes;
+          // Only fetch user stakes if wallet is connected
+          if (account?.address) {
+            const options = (pollData.content.fields as any).value?.fields?.options;
+            userStakesFetched[i] = {};
             
-            if (account?.address && userStakesTable) {
+            for (let optIdx = 0; optIdx < options.length; optIdx++) {
+              const option = options[optIdx];
+              const userStakesTable = option.fields.user_stakes;
+              
               try {
                 const { data: userStakeData } = await suiClient.getDynamicFieldObject({
                   parentId: userStakesTable.fields.id.id,
@@ -97,10 +95,14 @@ function StakePage() {
       }
       
       console.log('Fetched polls:', pollsFetched);
-      console.log('Fetched user stakes:', userStakesFetched);
+      if (account?.address) {
+        console.log('Fetched user stakes:', userStakesFetched);
+      }
       
       setPolls(pollsFetched);
-      setUserStakes(userStakesFetched);
+      if (account?.address) {
+        setUserStakes(userStakesFetched);
+      }
     } catch (error) {
       console.error('Error fetching polls:', error);
     } finally {
