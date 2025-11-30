@@ -1,151 +1,73 @@
-# MeeMo Arena 🚀
+# Welcome to your Lovable project
 
-MeeMo Arena is a Web3 platform built on the Sui blockchain where meme lovers can create, stake, and earn with AI-generated NFTs. The platform combines the power of artificial intelligence with blockchain technology to create a unique and engaging experience for users.
+## Project info
 
-## 🌟 Features
+**URL**: https://lovable.dev/projects/a8e7cbad-f0a1-4c74-bcd2-0e1b967e4099
 
-### AI NFT Creation 🎨
-- Generate unique NFTs using cutting-edge AI technology
-- Mint NFTs directly to the Sui blockchain
-- Participate in NFT battles
+## How can I edit this code?
 
-### Staking System 💰
-- Stake SUI tokens on community polls
-- Vote for favorite memes
-- Earn rewards for successful predictions
+There are several ways of editing your application.
 
-### Competitive Arena 🏆
-- Enter meme battles with AI-generated NFTs
-- Compete for community votes
-- Claim victory rewards
+**Use Lovable**
 
-## 🛠️ Technology Stack
+Simply visit the [Lovable Project](https://lovable.dev/projects/a8e7cbad-f0a1-4c74-bcd2-0e1b967e4099) and start prompting.
 
-- **Frontend**: React with TypeScript
-- **Build Tool**: Vite
-- **UI Components**: Radix UI
-- **Blockchain**: Sui Network
-- **Wallet Connection**: @mysten/dapp-kit
-- **Routing**: React Router
-- **Package Manager**: pnpm
+Changes made via Lovable will be committed automatically to this repo.
 
-## 🚀 Getting Started
+**Use your preferred IDE**
 
-### Prerequisites
+If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
 
-- Node.js (v16 or higher)
-- pnpm package manager
-- Sui wallet (like Sui Wallet or Ethos Wallet)
-- Testnet SUI tokens (available from [Sui Faucet](https://faucet.sui.io))
+The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
 
-### Installation
+Follow these steps:
 
-1. Clone the repository:
-```bash
-git clone [repository-url]
-cd meemoarena
+```sh
+# Step 1: Clone the repository using the project's Git URL.
+git clone <YOUR_GIT_URL>
+
+# Step 2: Navigate to the project directory.
+cd <YOUR_PROJECT_NAME>
+
+# Step 3: Install the necessary dependencies.
+npm i
+
+# Step 4: Start the development server with auto-reloading and an instant preview.
+npm run dev
 ```
 
-2. Install dependencies:
-```bash
-pnpm install
-```
+**Edit a file directly in GitHub**
 
-3. Set up environment variables:
-Create a `.env` file in the root directory with the following variables:
-```env
-VITE_TESTNET_COUNTER_PACKAGE_ID=your_package_id
-VITE_PINATA_JWT=your_pinata_jwt
-VITE_GEMINI_API_KEY=your_gemini_api_key
-```
+- Navigate to the desired file(s).
+- Click the "Edit" button (pencil icon) at the top right of the file view.
+- Make your changes and commit the changes.
 
-4. Start the development server:
-```bash
-pnpm dev
-```
+**Use GitHub Codespaces**
 
-## 🌐 Deployment
+- Navigate to the main page of your repository.
+- Click on the "Code" button (green button) near the top right.
+- Select the "Codespaces" tab.
+- Click on "New codespace" to launch a new Codespace environment.
+- Edit files directly within the Codespace and commit and push your changes once you're done.
 
-The application is configured for deployment on Vercel. The `vercel.json` file handles client-side routing.
+## What technologies are used for this project?
 
-### Environment Variables for Production
+This project is built with:
 
-Make sure to configure the following environment variables in your Vercel project settings:
-- `VITE_TESTNET_COUNTER_PACKAGE_ID`
-- `VITE_PINATA_JWT`
-- `VITE_GEMINI_API_KEY`
+- Vite
+- TypeScript
+- React
+- shadcn-ui
+- Tailwind CSS
 
-## 🔧 Smart Contract Deployment
+## How can I deploy this project?
 
-### Setting up Sui CLI
+Simply open [Lovable](https://lovable.dev/projects/a8e7cbad-f0a1-4c74-bcd2-0e1b967e4099) and click on Share -> Publish.
 
-1. Install Sui CLI following the [official documentation](https://docs.sui.io/build/install)
+## Can I connect a custom domain to my Lovable project?
 
-2. Configure testnet environment:
-```bash
-sui client new-env --alias testnet --rpc https://fullnode.testnet.sui.io:443
-sui client switch --env testnet
-```
+Yes, you can!
 
-3. Create a new address (if needed):
-```bash
-sui client new-address secp256k1
-```
+To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
-4. Switch to your address:
-```bash
-sui client switch --address 0xYOUR_ADDRESS
-```
-
-### Publishing the Move Package
-
-1. Navigate to the Move directory:
-```bash
-cd move
-```
-
-2. Publish the package:
-```bash
-sui client publish --gas-budget 100000000 counter
-```
-
-3. Update the package ID in your environment variables.
-
-## 📱 Features Overview
-
-### Home Page
-- Modern UI with animated components
-- Platform feature showcase
-- Sui blockchain integration details
-
-### Stake Page
-- Meme staking interface
-- Community polls
-- Reward system
-
-### Claim Page
-- Reward claiming interface
-- Transaction history
-- Stake management
-
-### NFT Battle Page
-- AI NFT generation
-- Battle system
-- Voting mechanism
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## 📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## ⚡ Powered by Sui
-
-MeeMo Arena leverages Sui blockchain's features:
-- Lightning-fast transactions
-- Advanced security
-- Low gas fees
-- Object-centric architecture
-- Move language smart contracts
+Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)

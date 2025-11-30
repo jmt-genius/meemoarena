@@ -1,0 +1,331 @@
+{
+  "kpis": {
+    "activeUsers": {
+      "value": 45280,
+      "delta": 12.3,
+      "sparkline": [38000, 39500, 41200, 42800, 43900, 45280]
+    },
+    "mrr": {
+      "value": 127500,
+      "delta": 8.7,
+      "sparkline": [105000, 112000, 118000, 122000, 125000, 127500]
+    },
+    "conversionRate": {
+      "value": 3.42,
+      "delta": -0.3,
+      "sparkline": [3.5, 3.6, 3.4, 3.5, 3.3, 3.42]
+    },
+    "avgTicket": {
+      "value": 47.85,
+      "delta": 5.2,
+      "sparkline": [42, 44, 45, 46, 47, 47.85]
+    }
+  },
+  "services": [
+    {
+      "name": "Events",
+      "revenue": 45,
+      "yoyGrowth": 18.5,
+      "arpu": 52.3,
+      "color": "#2F63C9"
+    },
+    {
+      "name": "Subscriptions",
+      "revenue": 30,
+      "yoyGrowth": 24.2,
+      "arpu": 28.5,
+      "color": "#1E47A8"
+    },
+    {
+      "name": "Advertising",
+      "revenue": 15,
+      "yoyGrowth": 12.1,
+      "arpu": 8.2,
+      "color": "#5B8FDB"
+    },
+    {
+      "name": "Merchandise",
+      "revenue": 10,
+      "yoyGrowth": 9.8,
+      "arpu": 15.7,
+      "color": "#A7C8EB"
+    }
+  ],
+  "funnel": [
+    {
+      "stage": "Impressions",
+      "count": 1250000,
+      "conversion": 100
+    },
+    {
+      "stage": "Visitors",
+      "count": 312500,
+      "conversion": 25,
+      "drop": 937500
+    },
+    {
+      "stage": "Signups",
+      "count": 62500,
+      "conversion": 20,
+      "drop": 250000
+    },
+    {
+      "stage": "Active Users",
+      "count": 45280,
+      "conversion": 72.4,
+      "drop": 17220
+    },
+    {
+      "stage": "Purchases",
+      "count": 15486,
+      "conversion": 34.2,
+      "drop": 29794
+    }
+  ],
+  "revenueTimeline": [
+    {
+      "month": "Jan",
+      "recurring": 85000,
+      "oneTime": 35000,
+      "events": 25000
+    },
+    {
+      "month": "Feb",
+      "recurring": 88000,
+      "oneTime": 38000,
+      "events": 28000
+    },
+    {
+      "month": "Mar",
+      "recurring": 92000,
+      "oneTime": 42000,
+      "events": 32000
+    },
+    {
+      "month": "Apr",
+      "recurring": 95000,
+      "oneTime": 45000,
+      "events": 35000
+    },
+    {
+      "month": "May",
+      "recurring": 98000,
+      "oneTime": 48000,
+      "events": 38000
+    },
+    {
+      "month": "Jun",
+      "recurring": 102000,
+      "oneTime": 52000,
+      "events": 42000
+    },
+    {
+      "month": "Jul",
+      "recurring": 105000,
+      "oneTime": 55000,
+      "events": 45000
+    },
+    {
+      "month": "Aug",
+      "recurring": 108000,
+      "oneTime": 58000,
+      "events": 48000
+    },
+    {
+      "month": "Sep",
+      "recurring": 112000,
+      "oneTime": 62000,
+      "events": 52000
+    },
+    {
+      "month": "Oct",
+      "recurring": 115000,
+      "oneTime": 65000,
+      "events": 55000
+    },
+    {
+      "month": "Nov",
+      "recurring": 118000,
+      "oneTime": 68000,
+      "events": 58000
+    },
+    {
+      "month": "Dec",
+      "recurring": 122000,
+      "oneTime": 72000,
+      "events": 62000
+    }
+  ],
+  "channels": [
+    {
+      "name": "Organic",
+      "cac": 12.5,
+      "ltv": 285,
+      "roas": 22.8
+    },
+    {
+      "name": "Paid Search",
+      "cac": 45.2,
+      "ltv": 320,
+      "roas": 7.1
+    },
+    {
+      "name": "Social",
+      "cac": 28.7,
+      "ltv": 240,
+      "roas": 8.4
+    },
+    {
+      "name": "Referrals",
+      "cac": 8.3,
+      "ltv": 310,
+      "roas": 37.3
+    }
+  ],
+  "topEvents": [
+    {
+      "name": "Summer Music Festival",
+      "seatsSold": 8500,
+      "revenue": 425000,
+      "rating": 4.8
+    },
+    {
+      "name": "Tech Conference 2024",
+      "seatsSold": 2200,
+      "revenue": 198000,
+      "rating": 4.6
+    },
+    {
+      "name": "Comedy Night Special",
+      "seatsSold": 1800,
+      "revenue": 72000,
+      "rating": 4.9
+    },
+    {
+      "name": "Art Gallery Opening",
+      "seatsSold": 1200,
+      "revenue": 36000,
+      "rating": 4.7
+    },
+    {
+      "name": "Wine Tasting Experience",
+      "seatsSold": 950,
+      "revenue": 57000,
+      "rating": 4.8
+    },
+    {
+      "name": "Sports Tournament Finals",
+      "seatsSold": 6500,
+      "revenue": 325000,
+      "rating": 4.5
+    }
+  ],
+  "businessModel": {
+    "keyPartners": {
+      "count": 47,
+      "revenue": 35
+    },
+    "keyActivities": {
+      "events": 245,
+      "automated": 68
+    },
+    "valueProps": {
+      "uniqueFeatures": 12,
+      "satisfaction": 4.7
+    },
+    "customerSegments": {
+      "b2c": 72,
+      "b2b": 28
+    },
+    "channels": {
+      "digital": 85,
+      "offline": 15
+    },
+    "revenueStreams": {
+      "recurring": 65,
+      "oneTime": 35
+    },
+    "costStructure": {
+      "fixed": 45,
+      "variable": 55
+    }
+  },
+  "projections": {
+    "base": [
+      {
+        "month": "Jan",
+        "revenue": 195000,
+        "users": 48000,
+        "margin": 32
+      },
+      {
+        "month": "Feb",
+        "revenue": 205000,
+        "users": 50500,
+        "margin": 33
+      },
+      {
+        "month": "Mar",
+        "revenue": 215000,
+        "users": 53000,
+        "margin": 33.5
+      },
+      {
+        "month": "Apr",
+        "revenue": 225000,
+        "users": 55500,
+        "margin": 34
+      },
+      {
+        "month": "May",
+        "revenue": 235000,
+        "users": 58000,
+        "margin": 34.5
+      },
+      {
+        "month": "Jun",
+        "revenue": 245000,
+        "users": 60500,
+        "margin": 35
+      }
+    ],
+    "optimistic": [
+      {
+        "month": "Jan",
+        "revenue": 215000,
+        "users": 52000,
+        "margin": 35
+      },
+      {
+        "month": "Feb",
+        "revenue": 235000,
+        "users": 56000,
+        "margin": 36
+      },
+      {
+        "month": "Mar",
+        "revenue": 255000,
+        "users": 60000,
+        "margin": 37
+      },
+      {
+        "month": "Apr",
+        "revenue": 275000,
+        "users": 64000,
+        "margin": 38
+      },
+      {
+        "month": "May",
+        "revenue": 295000,
+        "users": 68000,
+        "margin": 39
+      },
+      {
+        "month": "Jun",
+        "revenue": 315000,
+        "users": 72000,
+        "margin": 40
+      }
+    ]
+  }
+}
